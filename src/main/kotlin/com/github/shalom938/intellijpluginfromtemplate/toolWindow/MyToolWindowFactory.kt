@@ -10,6 +10,11 @@ import com.intellij.ui.components.JBPanel
 import com.intellij.ui.content.ContentFactory
 import com.github.shalom938.intellijpluginfromtemplate.MyBundle
 import com.github.shalom938.intellijpluginfromtemplate.services.MyProjectService
+import com.intellij.ui.jcef.JBCefApp
+import com.intellij.ui.jcef.JBCefBrowserBase
+import com.intellij.ui.jcef.JBCefBrowserBuilder
+import org.cef.CefApp
+import java.awt.BorderLayout
 import javax.swing.JButton
 
 
@@ -32,14 +37,28 @@ class MyToolWindowFactory : ToolWindowFactory {
         private val service = toolWindow.project.service<MyProjectService>()
 
         fun getContent() = JBPanel<JBPanel<*>>().apply {
-            val label = JBLabel(MyBundle.message("randomLabel", "?"))
 
-            add(label)
-            add(JButton(MyBundle.message("shuffle")).apply {
-                addActionListener {
-                    label.text = MyBundle.message("randomLabel", service.getRandomNumber())
-                }
-            })
+            layout = BorderLayout()
+
+            if (!JBCefApp.isSupported()) {
+                val label = JBLabel("JCef not supported")
+                add(label)
+                return@apply
+            }
+
+            val jbCefBrowser = JBCefBrowserBuilder()
+                .build()
+
+            jbCefBrowser.setErrorPage(JBCefBrowserBase.ErrorPage.DEFAULT)
+
+            val lifespanHandler = MyLifespanHandle()
+            jbCefBrowser.jbCefClient.addLifeSpanHandler(lifespanHandler, jbCefBrowser.cefBrowser)
+
+
+
+            add(jbCefBrowser.component, BorderLayout.CENTER)
+
+
         }
     }
 }
