@@ -1,21 +1,20 @@
 package com.github.shalom938.intellijpluginfromtemplate.toolWindow
 
+import com.github.shalom938.intellijpluginfromtemplate.services.MyProjectService
 import com.intellij.openapi.components.service
 import com.intellij.openapi.diagnostic.thisLogger
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.wm.ToolWindow
 import com.intellij.openapi.wm.ToolWindowFactory
+import com.intellij.ui.JBColor
 import com.intellij.ui.components.JBLabel
 import com.intellij.ui.components.JBPanel
 import com.intellij.ui.content.ContentFactory
-import com.github.shalom938.intellijpluginfromtemplate.MyBundle
-import com.github.shalom938.intellijpluginfromtemplate.services.MyProjectService
 import com.intellij.ui.jcef.JBCefApp
 import com.intellij.ui.jcef.JBCefBrowserBase
 import com.intellij.ui.jcef.JBCefBrowserBuilder
-import org.cef.CefApp
 import java.awt.BorderLayout
-import javax.swing.JButton
+import javax.swing.SwingConstants
 
 
 class MyToolWindowFactory : ToolWindowFactory {
@@ -48,6 +47,9 @@ class MyToolWindowFactory : ToolWindowFactory {
 
             val jcefRemoteEnabled = System.getProperty("jcef.remote.enabled")
             val jcefRemoteLabel = JBLabel("JCEf remote enable : $jcefRemoteEnabled")
+            jcefRemoteLabel.isOpaque = true
+            jcefRemoteLabel.background = JBColor.BLUE
+            jcefRemoteLabel.horizontalAlignment = SwingConstants.CENTER
             add(jcefRemoteLabel, BorderLayout.NORTH)
 
 
