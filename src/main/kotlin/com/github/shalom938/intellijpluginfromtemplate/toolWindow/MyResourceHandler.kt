@@ -19,27 +19,12 @@ class MyResourceHandler : CefResourceHandler {
     override fun processRequest(
         request: CefRequest, callback: CefCallback
     ): Boolean {
-        thisLogger().info("got request ${request.url}")
-//        val html = """
-//    <!DOCTYPE html>
-//    <html lang="en">
-//    <head>
-//        <meta charset="UTF-8">
-//        <title>Hello World</title>
-//    </head>
-//    <body>
-//        <h1>Hello, World!</h1>
-//        <p>This is a basic HTML page.</p>
-//    </body>
-//    </html>
-//""".trimIndent()
-//
-//        inputStream = html.byteInputStream(Charsets.UTF_8)
+        thisLogger().info("Processing request ${request.url}")
 
         inputStream = MyResourceHandler::class.java.getResourceAsStream("/index.html")
 
         if (inputStream == null) {
-            thisLogger().info("inputStream is null , canceling request ${request.url}")
+            thisLogger().info("inputStream is null for ${request.url} , canceling request ${request.url}")
             callback.cancel()
             return false
         }
