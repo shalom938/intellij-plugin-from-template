@@ -10,6 +10,5 @@
 
     <extensions defaultExtensionNs="com.intellij">
         <toolWindow factoryClass="com.github.shalom938.intellijpluginfromtemplate.toolWindow.MyToolWindowFactory" id="MyToolWindow"/>
-        <postStartupActivity implementation="com.github.shalom938.intellijpluginfromtemplate.startup.MyProjectActivity" />
     </extensions>
 </idea-plugin>
