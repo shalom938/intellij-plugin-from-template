@@ -5,14 +5,22 @@ import org.cef.browser.CefFrame
 import org.cef.callback.CefSchemeHandlerFactory
 import org.cef.handler.CefResourceHandler
 import org.cef.network.CefRequest
+import java.net.URI
 
 class MySchemaHandlerFactory : CefSchemeHandlerFactory {
     override fun create(
-        browser: CefBrowser?,
-        frame: CefFrame?,
-        schemeName: String?,
-        request: CefRequest?
+        browser: CefBrowser,
+        frame: CefFrame,
+        schemeName: String,
+        request: CefRequest
     ): CefResourceHandler? {
+
+
+        val url = URI(request.url).toURL()
+        if(url.path.startsWith("api-proxy")){
+            return MyApiProxyHandler()
+        }
+
         return MyResourceHandler()
     }
 
