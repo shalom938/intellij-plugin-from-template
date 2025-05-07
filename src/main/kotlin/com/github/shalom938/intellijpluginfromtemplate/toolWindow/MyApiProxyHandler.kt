@@ -24,9 +24,20 @@ class MyApiProxyHandler : CefResourceHandler {
         callback: CefCallback
     ): Boolean {
         try {
+
+            thisLogger().info("Processing request ${request.url}")
+
             val postData = request.postData?.let {
                 postDataToByteArray(it)
             }
+
+            if ("get".equals(request.method,true) && postData != null){
+                thisLogger().warn("Got get request but post data is not null")
+            }
+            if ("post".equals(request.method,true) && postData != null && postData.isEmpty()){
+                thisLogger().warn("Got post request but post data is empty")
+            }
+
             val requestUrl = request.url
             val requestMethod = request.method
             val headers = mutableMapOf<String, String>()
@@ -34,7 +45,11 @@ class MyApiProxyHandler : CefResourceHandler {
 
             val okHttpRequest = toOkHttp3Request(requestUrl, requestMethod, headers, postData)
             okHttpResponse = okHttpClient.newCall(okHttpRequest).execute()
+
         }catch (e:Exception){
+
+            thisLogger().error("Error processing request ${request.url}",e)
+
             //mock okhttp error response
             val request = Request.Builder()
                 .url(request.url)
@@ -100,7 +115,7 @@ class MyApiProxyHandler : CefResourceHandler {
             val read = inputStream?.read(dataOut, 0, bytesToRead)
             if (read == null || read <= 0) {
                 bytesRead.set(0)
-                inputStream?.close()
+                okHttpResponse?.close()
                 return false
             }
             bytesRead.set(read)
@@ -113,7 +128,9 @@ class MyApiProxyHandler : CefResourceHandler {
     }
 
     override fun cancel() {
-        okHttpResponse?.close()
+        if (okHttpResponse?.body() != null) {
+            okHttpResponse?.close()
+        }
     }
 
 
