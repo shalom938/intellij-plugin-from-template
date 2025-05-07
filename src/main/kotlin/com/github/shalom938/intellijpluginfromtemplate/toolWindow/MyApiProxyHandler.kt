@@ -2,6 +2,7 @@ package com.github.shalom938.intellijpluginfromtemplate.toolWindow
 
 import com.intellij.openapi.diagnostic.thisLogger
 import okhttp3.*
+import okhttp3.internal.http.HttpMethod
 import org.cef.callback.CefCallback
 import org.cef.handler.CefResourceHandler
 import org.cef.misc.IntRef
@@ -51,11 +52,16 @@ class MyApiProxyHandler : CefResourceHandler {
             thisLogger().error("Error processing request ${request.url}",e)
 
             //mock okhttp error response
-            val request = Request.Builder()
+            val mockRequest = Request.Builder()
                 .url(request.url)
                 .build()
 
-            val errorJson = """{"error": "${e.message ?: e.toString()}"}"""
+            var errorMsg = e.message ?: e.toString()
+            if (!HttpMethod.permitsRequestBody(request.method.uppercase()) && request.postData != null){
+                errorMsg = "Method ${request.method} has non null post data. okhttp error:$errorMsg"
+            }
+
+            val errorJson = """{"error": "$errorMsg"}"""
 
             val responseBody = ResponseBody.create(
                 MediaType.parse("application/json"),
@@ -63,7 +69,7 @@ class MyApiProxyHandler : CefResourceHandler {
             )
 
             okHttpResponse = Response.Builder()
-                .request(request)
+                .request(mockRequest)
                 .protocol(Protocol.HTTP_1_1)
                 .code(500)
                 .message("Internal jcef Error: ${e.message}")
