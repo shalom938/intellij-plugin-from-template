@@ -55,6 +55,7 @@ class MyApiProxyHandler : CefResourceHandler {
                 .body(responseBody)
                 .header("Content-Type", "application/json")
                 .header("Cache-Control", "no-cache")
+                .header("Access-Control-Allow-Origin", "*")
                 .build()
         }
 
