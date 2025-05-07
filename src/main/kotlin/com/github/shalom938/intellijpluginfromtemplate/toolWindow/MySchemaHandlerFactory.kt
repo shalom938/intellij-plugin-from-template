@@ -17,7 +17,7 @@ class MySchemaHandlerFactory : CefSchemeHandlerFactory {
 
 
         val url = URI(request.url).toURL()
-        if(url.path.startsWith("api-proxy")){
+        if(url.path.startsWith("/objects")){
             return MyApiProxyHandler()
         }
 

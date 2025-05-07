@@ -20,21 +20,23 @@ class MyResourceHandler : CefResourceHandler {
         request: CefRequest, callback: CefCallback
     ): Boolean {
         thisLogger().info("got request ${request.url}")
-        val html = """
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <title>Hello World</title>
-    </head>
-    <body>
-        <h1>Hello, World!</h1>
-        <p>This is a basic HTML page.</p>
-    </body>
-    </html>
-""".trimIndent()
+//        val html = """
+//    <!DOCTYPE html>
+//    <html lang="en">
+//    <head>
+//        <meta charset="UTF-8">
+//        <title>Hello World</title>
+//    </head>
+//    <body>
+//        <h1>Hello, World!</h1>
+//        <p>This is a basic HTML page.</p>
+//    </body>
+//    </html>
+//""".trimIndent()
+//
+//        inputStream = html.byteInputStream(Charsets.UTF_8)
 
-        inputStream = html.byteInputStream(Charsets.UTF_8)
+        inputStream = MyResourceHandler::class.java.getResourceAsStream("/index.html")
 
         if (inputStream == null) {
             thisLogger().info("inputStream is null , canceling request ${request.url}")

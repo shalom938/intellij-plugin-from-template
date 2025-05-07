@@ -47,6 +47,7 @@ class MyToolWindowFactory : ToolWindowFactory {
             }
 
             val jbCefBrowser = JBCefBrowserBuilder()
+                .setEnableOpenDevToolsMenuItem(true)
                 .build()
 
             jbCefBrowser.setErrorPage(JBCefBrowserBase.ErrorPage.DEFAULT)

@@ -21,7 +21,7 @@ class MyLifespanHandle: CefLifeSpanHandler {
         thisLogger().info("in onAfterCreated")
         val schemeHandlerFactory = MySchemaHandlerFactory()
         CefApp.getInstance().registerSchemeHandlerFactory(
-            schemeHandlerFactory.getSchema(), schemeHandlerFactory.getDomain(), schemeHandlerFactory
+            schemeHandlerFactory.getSchema(), null, schemeHandlerFactory
         )
         browser?.loadURL("https://main/index.html")
     }
