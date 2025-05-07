@@ -42,9 +42,14 @@ class MyToolWindowFactory : ToolWindowFactory {
 
             if (!JBCefApp.isSupported()) {
                 val label = JBLabel("JCef not supported")
-                add(label)
+                add(label,BorderLayout.CENTER)
                 return@apply
             }
+
+            val jcefRemoteEnabled = System.getProperty("jcef.remote.enabled")
+            val jcefRemoteLabel = JBLabel("JCEf remote enable : $jcefRemoteEnabled")
+            add(jcefRemoteLabel, BorderLayout.NORTH)
+
 
             val jbCefBrowser = JBCefBrowserBuilder()
                 .setEnableOpenDevToolsMenuItem(true)

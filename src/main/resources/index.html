@@ -304,9 +304,16 @@
         const response = await fetch(url, options);
         const data = await response.json();
 
+        if (!response.ok) {
+          const errorMessage =
+            data.error || data.message || JSON.stringify(data);
+          responseElement.textContent = `Server Error (${response.status}): ${errorMessage}`;
+          return;
+        }
+
         responseElement.textContent = JSON.stringify(data, null, 2);
       } catch (error) {
-        responseElement.textContent = `Error: ${error.message}`;
+        responseElement.textContent = `Client Error: ${error.message}`;
       }
     }
 
